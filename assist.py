@@ -17,15 +17,11 @@ def add(*args):
 
 
 @handle_errors
-def greeting(*args):
-    for arg in args:
-        if arg == "hello":
-            return "How can I help you?"
-        elif arg == "good bye":
-            return "See you soon"
-
-    return "How can I help you?"     # Не знаю,як це змінювати на "See you soon"
-
+def greeting(text):
+    if text in ["hello","good morning"]:
+        return "How can I help you?"
+    else:
+        return "See you soon"                 #Не знаю,як змінити відповідь "Hello" - "How can I helpl you?"
 
 @handle_errors
 def no_command(*args):
@@ -35,9 +31,9 @@ def no_command(*args):
 def parser(text: str) -> tuple[callable, tuple[str] | None]:
     if text.startswith('add'):
         return add, text.replace("add", "").strip().split()
-    elif text.startswith('hello'):
+    elif text == 'hello':
         return greeting, (text,)
-    elif text.startswith('good bye'):
+    elif text =='good bye':
         return greeting, (text, )
     else:
         return no_command, None
@@ -48,7 +44,7 @@ def main():
         user_input = input(">>>>")
         command, data = parser(user_input)
         if command is None:
-            print("See you soon")
+            print("See you soon!")
             break
         result = command(data)
         if result is not None:
