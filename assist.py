@@ -61,21 +61,23 @@ def no_command(*args):
     return "Unknown command"
 
 
-def parser(text: str) -> tuple[callable, tuple[str] | None]:
-    if text.startswith('add'):
-        return add, tuple(text.replace("add", "").strip().split())
-    elif text.startswith("change"):
-        return change, tuple(text.replace('change', "").strip().split())
-    elif text.startswith("phone"):
-        return phone, text.replace ("phone", "").strip()
-    elif text.startswith ("show all"):
-        return show_all,tuple(text.replace("show all","").strip().split())
-    elif text == 'hello':
-        return greeting, text
-    elif text =='good bye':
-        return exit_command,text
-    return no_command()
+COMMANDS = {add:"add",
+            change:"change",
+            phone:"phone",
+            show_all:"show_all",
+            greeting:"hello",
+            exit_command:"good bye"
+            }
 
+
+def parser(text: str) -> tuple[callable, tuple[str] | None]:
+   
+      for cmd,kwd in COMMANDS.items():
+          if text.lower().startswith(kwd):
+              return cmd, text[len(kwd):].strip().split()
+        
+
+      return no_command,None 
 def main():
     while True:
         user_input = input(">>>>")
@@ -83,7 +85,7 @@ def main():
         if command is None:
             print("See you soon")
             break
-        result = command(data)
+        result = command(*data)
         if result:
             print(result)
         if command == exit_command:
